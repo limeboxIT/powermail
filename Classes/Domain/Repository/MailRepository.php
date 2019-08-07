@@ -124,17 +124,19 @@ class MailRepository extends AbstractRepository
      * @param string $marker
      * @param string $value
      * @param Form $form
+     * @param int $mailUid
      * @param int $pageUid
      * @return QueryResultInterface
      */
-    public function findByMarkerValueForm($marker, $value, $form, $pageUid)
+    public function findByMarkerValueForm($marker, $value, $form, $mailUid, $pageUid)
     {
         $query = $this->createQuery();
         $fieldRepository = $this->objectManager->get(FieldRepository::class);
         $and = [
             $query->equals('answers.field', $fieldRepository->findByMarkerAndForm($marker, $form->getUid())),
             $query->equals('answers.value', $value),
-            $query->equals('pid', $pageUid)
+            $query->equals('pid', $pageUid),
+            $query->logicalNot($query->equals('answers.mail', $mailUid))
         ];
         $query->matching($query->logicalAnd($and));
         return $query->execute();

@@ -37,6 +37,7 @@ class UniqueValidator extends AbstractValidator
                         $marker,
                         $answer->getValue(),
                         $mail->getForm(),
+                        $mail->getUid(),
                         FrontendUtility::getStoragePage($this->getStoragePid())
                     )->count();
 
